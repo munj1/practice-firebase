@@ -27,7 +27,7 @@ const Firestore = () => {
   };
 
   const ageQuery = query(userDataCollectionRef, where("age", "<", 30));
-  // collection, ref처럼 쓸수있음
+  // collection, ref처럼 쓸수있음 , onSnapshot 안에 집어넣기 쌉가능
 
   const handleSubmit = () => {
     addDoc(userDataCollectionRef, {

@@ -8,6 +8,8 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
   GithubAuthProvider,
+  signOut,
+  onAuthStateChanged,
 } from "firebase/auth";
 import { useEffect } from "react";
 import Link from "next/link";
@@ -29,10 +31,20 @@ export default function Home() {
     console.log("connected user: ", user?.email);
   });
 
+  useEffect(() => {
+    onAuthStateChanged(auth, (data) => {
+      if (data) {
+        alert("loggged in", data);
+      } else {
+        alert("not logged in");
+      }
+    });
+  }, []);
+
   const handleSignUp = () => {
     createUserWithEmailAndPassword(auth, data.email, data.password)
       .then((res) => {
-        console.log(res.user);
+        // console.log(res.user);
       })
       .catch((err) => {
         alert(err.message);
@@ -42,17 +54,21 @@ export default function Home() {
   const handleSignIn = () => {
     signInWithEmailAndPassword(auth, data.email, data.password)
       .then((res) => {
-        console.log(res.user);
+        // console.log(res.user);
       })
       .catch((err) => {
         alert(err.message);
       });
   };
 
+  const handleSignOut = () => {
+    signOut(auth);
+  };
+
   const handleSignInWithGoogle = () => {
     signInWithPopup(auth, googleProvider)
       .then((res) => {
-        console.log(res.user);
+        // console.log(res.user);
       })
       .catch((err) => {
         alert(err.message);
@@ -62,7 +78,7 @@ export default function Home() {
   const handleSignInWithGithub = () => {
     signInWithPopup(auth, githubProvider)
       .then((res) => {
-        console.log(res.user);
+        // console.log(res.user);
       })
       .catch((err) => {
         alert(err.message);
@@ -84,7 +100,7 @@ export default function Home() {
           placeholder="Password"
           onChange={(e) => handleInput(e)}
         />
-        <button onClick={handleSignUp}>Submit</button>
+        <button onClick={handleSignUp}>Sign Up</button>
       </div>
       <div>
         <input
@@ -99,6 +115,7 @@ export default function Home() {
           onChange={(e) => handleInput(e)}
         />
         <button onClick={handleSignIn}>Sign In</button>
+        <button onClick={handleSignOut}>Sign Out</button>
       </div>
       <div>
         <button onClick={handleSignInWithGoogle}>Sign In With Google</button>
